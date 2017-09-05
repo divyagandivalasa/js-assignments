@@ -69,8 +69,8 @@ function getStringFromTemplate(firstName, lastName) {
  *   'Hello, Chuck Norris!' => 'Chuck Norris'
  */
 function extractNameFromTemplate(value) {
-    var x = value.slice(0, value.length - 1);
-    var y = x.split(',');
+    let x = value.slice(0, value.length - 1);
+    let y = x.split(',');
     return y[1].trim();
 }
 
@@ -116,8 +116,8 @@ function removeLeadingAndTrailingWhitespaces(value) {
  *   'cat', 3 => 'catcatcat'
  */
 function repeatString(value, count) {
-    var updatedString = "";
-    for (var i = 0; i < count; i++) {
+    let updatedString = "";
+    for (let i = 0; i < count; i++) {
         updatedString = updatedString + value;
     }
     return updatedString;
@@ -207,16 +207,28 @@ function extractEmails(str) {
  *
  */
 function getRectangleString(width, height) {
-    var updatedString = "";
-    for (var i = 0; i <= height; i++) {
-        for (var j = 0; j <= width; j++) {
-            if(i==0 || i==height-1){
-                updatedString = updatedString + "|";
-            } else if(j==0 || j==width-1){
-                updatedString = updatedString + "-";
-            }else {
+    let updatedString = "";
+    for (let i = 1; i <= height; i++) {
+        for (let j = 1; j <= width; j++) {
+            if (i == 1 && j == 1) {
+                updatedString = updatedString + "┌";
+            } else if (i == height && j == 1) {
+                updatedString = updatedString + "└";
+            } else if (i == 1 && j == width) {
+                updatedString = updatedString + "┐";
+            } else if (i == height && j == width) {
+                updatedString = updatedString + "┘";
+            } else if (i == 1 && j > 1 && j < width) {
+                updatedString = updatedString + "─";
+            } else if (i == height && j > 1 && j < width) {
+                updatedString = updatedString + "─";
+            } else if (j == 1 && i > 1 && i < height) {
+                updatedString = updatedString + "│";
+            } else if (j == width && i > 0 && i < height) {
+                updatedString = updatedString + "│";
+            } else {
                 updatedString = updatedString + " ";
-            }            
+            }
         }
         updatedString = updatedString + "\n";
     }
@@ -240,7 +252,18 @@ function getRectangleString(width, height) {
  *
  */
 function encodeToRot13(str) {
-    throw new Error('Not implemented');
+    let newString = '';
+    let arr = [];
+    for (let i = 0; i < str.length; i++) {
+        arr[i] = str.charCodeAt(i);
+        if ((arr[i] >= 65 && arr[i] <= 77) || (arr[i] >= 97 && arr[i] <= 109)) {
+            arr[i] += 13;
+        } else if ((arr[i] >= 78 && arr[i] <= 90) || (arr[i] >= 110 && arr[i] <= 122)) {
+            arr[i] -= 13;
+        } else arr[i] = arr[i];
+        newString += String.fromCharCode(arr[i]);
+    }
+    return newString;
 }
 
 /**
@@ -257,7 +280,7 @@ function encodeToRot13(str) {
  *   isString(new String('test')) => true
  */
 function isString(value) {
-    throw new Error('Not implemented');
+    return typeof value === 'string' || value instanceof String;
 }
 
 
@@ -286,7 +309,11 @@ function isString(value) {
  *   'K♠' => 51
  */
 function getCardId(value) {
-    throw new Error('Not implemented');
+    let cards = ['A♣','2♣','3♣','4♣','5♣','6♣','7♣','8♣','9♣','10♣','J♣','Q♣','K♣',
+    'A♦','2♦','3♦','4♦','5♦','6♦','7♦','8♦','9♦','10♦','J♦','Q♦','K♦',
+    'A♥','2♥','3♥','4♥','5♥','6♥','7♥','8♥','9♥','10♥','J♥','Q♥','K♥',
+    'A♠','2♠','3♠','4♠','5♠','6♠','7♠','8♠','9♠','10♠','J♠','Q♠','K♠'];
+    return cards.indexOf(value);
 }
 
 
