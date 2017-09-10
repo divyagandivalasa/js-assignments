@@ -453,7 +453,7 @@ function toStringList(arr) {
 function sortCitiesArray(arr) {
     return arr.sort(function (a, b) {
         return a.country.localeCompare(b.country) ||
-           a.city.localeCompare(b.city)
+            a.city.localeCompare(b.city)
     });
 }
 
@@ -476,7 +476,8 @@ function sortCitiesArray(arr) {
  *           [0,0,0,0,1]]   
  */
 function getIdentityMatrix(n) {
-    return Array.apply(0, new Array(n)).map(i => 0)
+    // return Array.apply(0, new Array(n)).map(i => 0)
+    throw new Error('Not implemented');
 }
 
 /**
