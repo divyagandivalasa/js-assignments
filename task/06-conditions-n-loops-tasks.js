@@ -140,7 +140,12 @@ function isTriangle(a, b, c) {
  *  
  */
 function doRectanglesOverlap(rect1, rect2) {
-    throw new Error('Not implemented');
+    return !(
+        rect1.top > rect2.top + rect2.height ||
+        rect1.left > rect2.left + rect2.width ||
+        rect1.top + rect1.height < rect2.top ||
+        rect1.left + rect1.width < rect2.left
+    );
 }
 
 
@@ -313,7 +318,14 @@ function reverseInteger(num) {
  *   4916123456789012 => false
  */
 function isCreditCardNumber(ccn) {
-    throw new Error('Not implemented');
+    var summ = 0;
+    ccn = ccn.toString();
+    for (var i = 0; i < ccn.length; i++)
+        if (ccn.length % 2 !== i % 2)
+            summ += ccn[i] * 1;
+        else
+            summ += ccn[i] * 2 + (ccn[i] > 4 ? -9 : 0);
+    return summ % 10 === 0;
 }
 
 
@@ -332,7 +344,15 @@ function isCreditCardNumber(ccn) {
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
 function getDigitalRoot(num) {
-   throw new Error('Not implemented');
+    while (num > 9) {
+        let i = num;
+        num = 0;
+        while (i > 0) {
+            num += i % 10
+            i = Math.floor(i / 10);
+        }
+    }
+    return num;
 }
 
 
@@ -358,7 +378,16 @@ function getDigitalRoot(num) {
  *   '{[(<{[]}>)]}' = true 
  */
 function isBracketsBalanced(str) {
-    throw new Error('Not implemented');
+    var arr = [],
+        open = ['[', '(', '{', '<'],
+        close = [']', ')', '}', '>'];
+    for (var i = 0; i < str.length; i++) {
+        if (open.indexOf(str[i]) >= 0)
+            arr.push(open.indexOf(str[i]));
+        else if (close[arr.pop()] != str[i])
+            return false;
+    }
+    return arr.length == 0;
 }
 
 
@@ -394,7 +423,28 @@ function isBracketsBalanced(str) {
  *
  */
 function timespanToHumanString(startDate, endDate) {
-    throw new Error('Not implemented');
+    var diff = endDate.getTime() - startDate.getTime();
+    if (diff <= 45 * 1000)
+        return 'a few seconds ago';
+    if (diff <= 90 * 1000)
+        return 'a minute ago';
+    if (diff <= 45 * 60 * 1000)
+        return `${Math.round((diff - 1) / 60 / 1000)} minutes ago`;
+    if (diff <= 90 * 60 * 1000)
+        return 'an hour ago';
+    if (diff <= 22 * 60 * 60 * 1000)
+        return `${Math.round((diff - 1) / 60 / 60 / 1000)} hours ago`;
+    if (diff <= 36 * 60 * 60 * 1000)
+        return 'a day ago';
+    if (diff <= 25 * 24 * 60 * 60 * 1000)
+        return `${Math.round((diff - 1) / 24 / 60 / 60 / 1000)} days ago`;
+    if (diff <= 45 * 24 * 60 * 60 * 1000)
+        return 'a month ago';
+    if (diff <= 345 * 24 * 60 * 60 * 1000)
+        return `${Math.round(diff / 30 / 24 / 60 / 60 / 1000)} months ago`;
+    if (diff <= 545 * 24 * 60 * 60 * 1000)
+        return 'a year ago';
+    return `${Math.round(diff / 365 / 24 / 60 / 60 / 1000)} years ago`;
 }
 
 
@@ -435,7 +485,20 @@ function toNaryString(num, n) {
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
 function getCommonDirectoryPath(pathes) {
-    throw new Error('Not implemented');
+    var path = '';
+    for (var i = 0; i < pathes[0].length; i++) {
+        var b = true;
+        for (var j = 1; j < pathes.length; j++)
+            if (pathes[0][i] != pathes[j][i]) {
+                b = false;
+                break;
+            }
+        if (!b)
+            break;
+        else
+            path += pathes[0][i];
+    }
+    return path.slice(0, path.lastIndexOf('/') + 1);
 }
 
 
@@ -458,7 +521,16 @@ function getCommonDirectoryPath(pathes) {
  *
  */
 function getMatrixProduct(m1, m2) {
-    throw new Error('Not implemented');
+    var result = [];
+    for (var i = 0; i < m1.length; i++) {
+        result[i] = [];
+        for (var j = 0; j < m2[i].length; j++) {
+            result[i][j] = 0;
+            for (var t = 0; t < m1[i].length; t++)
+                result[i][j] += m1[i][t] * m2[t][j];
+        }
+    }
+    return result;
 }
 
 
@@ -493,7 +565,26 @@ function getMatrixProduct(m1, m2) {
  *
  */
 function evaluateTicTacToePosition(position) {
-    throw new Error('Not implemented');
+     let win = [
+        [[0, 0], [0, 1], [0, 2]],
+        [[1, 0], [1, 1], [1, 2]],
+        [[2, 0], [2, 1], [2, 2]],
+        [[0, 0], [1, 0], [2, 0]],
+        [[0, 1], [1, 1], [2, 1]],
+        [[0, 2], [1, 2], [2, 2]],
+        [[0, 0], [1, 1], [2, 2]],
+        [[2, 0], [1, 1], [0, 2]]
+    ];
+    for (let row of win) {
+        let b = true,
+            v = position[row[0][0]][row[0][1]];
+        if (v !== undefined) {
+            for (let i = 1; i < row.length; i++)
+                b = b && v === position[row[i][0]][row[i][1]];
+            if (b)
+                return v;
+        }
+    }
 }
 
 
